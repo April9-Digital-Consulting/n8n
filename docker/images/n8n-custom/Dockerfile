@@ -19,6 +19,7 @@ COPY packages/nodes-base/ ./packages/nodes-base/
 COPY packages/workflow/ ./packages/workflow/
 RUN rm -rf node_modules packages/*/node_modules packages/*/dist
 
+ENV BASE_PATH="/workflow_engine/" VUE_APP_URL_BASE_API="/workflow_engine/"
 RUN npm install --production --loglevel notice
 RUN lerna bootstrap --hoist -- --production
 RUN npm run build
@@ -26,7 +27,7 @@ RUN npm run build
 
 # 2. Start with a new clean image with just the code that is needed to run n8n
 FROM node:12.16-alpine
-
+ENV N8N_PATH="/workflow_engine/"
 USER root
 
 RUN apk add --update graphicsmagick tzdata tini su-exec
